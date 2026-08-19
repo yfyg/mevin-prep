@@ -5,7 +5,8 @@
 
 const STORAGE_KEY = "mevinPrepStats_v1";
 const MIXED_KEY = "mixed";
-const MIXED_PER_CATEGORY = 4; // כמה שאלות מכל קטגוריה נכנסות לתרגול המעורב
+const QUESTIONS_PER_ROUND = 5; // כמה שאלות מוצגות בכל סבב תרגול של קטגוריה בודדת (כדי שלא יהיה עומס/עייפות)
+const MIXED_PER_CATEGORY = 5; // כמה שאלות מכל קטגוריה נכנסות לתרגול המעורב
 
 /* ---------------------------------------------------------
    כלים כלליים
@@ -64,7 +65,7 @@ function categoryCardHtml(key, opts) {
       <span class="icon">${cat.icon}</span>
       <h3>${cat.name}</h3>
       <p>${cat.description}</p>
-      <span class="count">${cat.questions.length} שאלות תרגול</span>
+      <span class="count">${Math.min(QUESTIONS_PER_ROUND, cat.questions.length)} שאלות בכל סבב (מתוך ${cat.questions.length} במאגר)</span>
     </${tag}>
   `;
 }
@@ -81,7 +82,7 @@ function renderHomeCategories() {
       <span class="icon">🎯</span>
       <h3>תרגול מעורב</h3>
       <p>שאלות מכל הקטגוריות, בדיוק כמו במבחן האמיתי</p>
-      <span class="count">${MIXED_PER_CATEGORY * getCategoryKeys().length} שאלות</span>
+      <span class="count">${MIXED_PER_CATEGORY * getCategoryKeys().length} שאלות (${MIXED_PER_CATEGORY} מכל תחום)</span>
     </a>
   `;
   grid.innerHTML = html;
@@ -118,11 +119,12 @@ function buildQuestionSet(categoryKey) {
     });
     return shuffle(combined);
   }
-  return shuffle(
+  const shuffled = shuffle(
     QUESTION_BANK[categoryKey].questions.map((q) =>
       Object.assign({ _catKey: categoryKey }, q)
     )
   );
+  return shuffled.slice(0, QUESTIONS_PER_ROUND);
 }
 
 function startQuiz(categoryKey) {
@@ -163,6 +165,9 @@ function renderQuestion() {
     bodyHtml += `<div class="passage-box">${q.passage}</div>`;
   }
   bodyHtml += `<div class="question-prompt">${q.prompt}</div>`;
+  if (q.diagramSvg) {
+    bodyHtml += `<div class="diagram-box">${q.diagramSvg}</div>`;
+  }
   bodyHtml += renderOptionsHtml(q);
   card.innerHTML = bodyHtml;
   attachOptionHandlers(q);
@@ -202,9 +207,16 @@ function showMemoryQuestionPrompt(card, q, tagHtml) {
 }
 
 function renderOptionsHtml(q) {
-  let html = '<div class="options-grid" id="options-grid">';
+  const hasSvgOptions = Array.isArray(q.optionsSvg) && q.optionsSvg.length === q.options.length;
+  let html = `<div class="options-grid${hasSvgOptions ? " svg-grid" : ""}" id="options-grid">`;
   q.options.forEach((opt, i) => {
-    html += `<button class="option-btn" data-index="${i}">${opt}</button>`;
+    if (hasSvgOptions) {
+      html += `<button class="option-btn svg-option" data-index="${i}" title="${opt}">
+        <span class="svg-option-inner">${q.optionsSvg[i]}</span>
+      </button>`;
+    } else {
+      html += `<button class="option-btn" data-index="${i}">${opt}</button>`;
+    }
   });
   html += "</div>";
   html += '<div id="feedback-slot"></div>';
@@ -307,7 +319,7 @@ function initPracticePage() {
         <span class="icon">🎯</span>
         <h3>תרגול מעורב</h3>
         <p>שאלות מכל הקטגוריות, בדיוק כמו במבחן האמיתי</p>
-        <span class="count">${MIXED_PER_CATEGORY * getCategoryKeys().length} שאלות</span>
+        <span class="count">${MIXED_PER_CATEGORY * getCategoryKeys().length} שאלות (${MIXED_PER_CATEGORY} מכל תחום)</span>
       </button>
     `;
     grid.innerHTML = html;
