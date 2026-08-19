@@ -81,7 +81,7 @@ function renderHomeCategories() {
     <a class="category-card mixed-card" href="practice.html?cat=${MIXED_KEY}">
       <span class="icon">🎯</span>
       <h3>תרגול מעורב</h3>
-      <p>שאלות מכל הקטגוריות, בדיוק כמו במבחן האמיתי</p>
+      <p>שאלות מעורבות מכל התחומים יחד</p>
       <span class="count">${MIXED_PER_CATEGORY * getCategoryKeys().length} שאלות (${MIXED_PER_CATEGORY} מכל תחום)</span>
     </a>
   `;
@@ -318,7 +318,7 @@ function initPracticePage() {
       <button class="category-card mixed-card" data-cat="${MIXED_KEY}">
         <span class="icon">🎯</span>
         <h3>תרגול מעורב</h3>
-        <p>שאלות מכל הקטגוריות, בדיוק כמו במבחן האמיתי</p>
+        <p>שאלות מעורבות מכל התחומים יחד</p>
         <span class="count">${MIXED_PER_CATEGORY * getCategoryKeys().length} שאלות (${MIXED_PER_CATEGORY} מכל תחום)</span>
       </button>
     `;
