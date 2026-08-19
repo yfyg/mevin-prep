@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>תרגול - מוכנים למבין</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo"><span class="emoji">🌟</span> מוכנים למבין</div>
+  <a class="nav-link" href="index.html">חזרה לדף הבית</a>
+</header>
+
+<div class="container">
+
+  <!-- Screen 1: category picker -->
+  <section id="screen-picker">
+    <h1>בחרו קטגוריה לתרגול</h1>
+    <p style="color: var(--text-muted);">אפשר לתרגל קטגוריה בודדת, או לבחור בתרגול מעורב שמשלב שאלות מכל הסוגים - בדיוק כמו במבחן.</p>
+    <div class="category-grid" id="picker-category-grid">
+      <!-- injected by script.js -->
+    </div>
+  </section>
+
+  <!-- Screen 2: quiz -->
+  <section id="screen-quiz" style="display:none;">
+    <div class="quiz-header">
+      <div class="question-counter" id="question-counter">שאלה 1 מתוך 10</div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="question-card" id="question-card">
+      <!-- injected by script.js -->
+    </div>
+  </section>
+
+  <!-- Screen 3: results -->
+  <section id="screen-results" style="display:none;">
+    <div class="results-card">
+      <div>כל הכבוד! סיימת את הסבב 🎉</div>
+      <div class="results-score" id="results-score">0 / 0</div>
+      <div class="results-message" id="results-message"></div>
+      <div class="action-row">
+        <button class="big-cta" id="btn-try-again">לתרגל עוד פעם</button>
+        <button class="secondary-btn" id="btn-choose-other">קטגוריה אחרת</button>
+      </div>
+    </div>
+    <div class="review-list" id="review-list"></div>
+  </section>
+
+</div>
+
+<footer class="site-footer">
+  נבנה באהבה עבור ילדים שמתכוננים למבחן המחוננים 💛 &middot; האתר לשימוש חינמי ואינו קשור למשרד החינוך
+</footer>
+
+<script src="questions.js"></script>
+<script src="script.js"></script>
+<script>
+  initPracticePage();
+</script>
+</body>
+</html>
